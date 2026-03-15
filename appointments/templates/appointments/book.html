@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .book-wrap {
+    max-width: 680px;
+    margin: 40px auto;
+    padding: 0 20px 60px;
+  }
+
+  .book-card {
+    background: rgba(15, 15, 35, 0.92);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  }
+
+  .book-title {
+    font-family: "Lora", serif;
+    font-size: 1.8rem;
+    color: var(--soul-gold);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .book-sub {
+    text-align: center;
+    color: var(--soul-muted);
+    font-size: 0.85rem;
+    margin-bottom: 32px;
+  }
+
+  .sv-form-group {
+    margin-bottom: 20px;
+  }
+
+  .sv-form-group label {
+    display: block;
+    color: var(--soul-muted);
+    font-size: 0.75rem;
+    margin-bottom: 7px;
+  }
+
+  .sv-form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #f0ead6;
+    font-size: 0.9rem;
+  }
+
+  .sv-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #c9a84c, #b8942a);
+    border: none;
+    border-radius: 10px;
+    color: #0d0d1a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+  }
+
+  .sv-submit:hover {
+    opacity: 0.88;
+  }
+
+  .price-box {
+    background: rgba(201, 168, 76, 0.08);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+
+  .price-box-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price-label {
+    color: var(--soul-muted);
+    font-size: 0.83rem;
+  }
+
+  .price-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--soul-gold);
+  }
+
+  .price-note {
+    font-size: 0.72rem;
+    color: var(--soul-muted);
+  }
+
+  .error-box {
+    background: rgba(255, 80, 80, 0.1);
+    border: 1px solid rgba(255, 80, 80, 0.4);
+    color: #ffaaaa;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+
+  /* ── SUCCESS MODAL ── */
+  .sv-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sv-modal-overlay.active {
+    display: flex;
+  }
+
+  .sv-modal {
+    background: rgba(15, 15, 35, 0.97);
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    border-radius: 22px;
+    padding: 44px 40px 36px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes modalPop {
+    from {
+      transform: scale(0.82);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .sv-modal-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 20px;
+    background: rgba(201, 168, 76, 0.12);
+    border: 2px solid rgba(201, 168, 76, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sv-modal-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke: #c9a84c;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sv-modal h3 {
+    font-family: "Lora", serif;
+    color: var(--soul-gold);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .sv-modal p {
+    color: rgba(240, 234, 214, 0.7);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  .sv-modal-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #c9a84c, #b8942a);
+    border: none;
+    border-radius: 10px;
+    color: #0d0d1a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .sv-modal-btn:hover {
+    opacity: 0.88;
+  }
+</style>
+
+
+{{ price_map|json_script:"priceData" }}
+
+
+<!-- SUCCESS MODAL -->
+<div class="sv-modal-overlay" id="successModal">
+  <div class="sv-modal">
+
+    <div class="sv-modal-icon">
+      <svg viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+
+    <h3>Booking Confirmed!</h3>
+    <p>
+      Your session has been booked successfully.<br>
+      A confirmation email has been sent to you.<br>
+      We look forward to seeing you!
+    </p>
+
+    <a href="{% url 'appointments:my_appointments' %}" class="sv-modal-btn">
+      View My Appointments
+    </a>
+
+  </div>
+</div>
+
+
+<div class="book-wrap">
+  <div class="book-card">
+
+    <h2 class="book-title">Book Your Session</h2>
+    <p class="book-sub">Choose therapist, session type and time slot</p>
+
+    {% if form.errors %}
+    <div class="error-box">
+      <strong>Please fix the following errors:</strong>
+      {{ form.errors }}
+    </div>
+    {% endif %}
+
+    <form method="POST" id="bookForm">
+      {% csrf_token %}
+
+      <div class="sv-form-group">
+        <label>Therapist</label>
+        {{ form.therapist }}
+      </div>
+
+      <div class="sv-form-group">
+        <label>Session Type</label>
+        {{ form.session_type }}
+      </div>
+
+      <div class="sv-form-group">
+        <label>Available Time Slot</label>
+        {{ form.slot }}
+      </div>
+
+      <div class="sv-form-group">
+        <label>Notes</label>
+        {{ form.notes }}
+      </div>
+
+      <div class="price-box">
+        <div class="price-box-row">
+          <span class="price-label">Session Fee</span>
+          <span class="price-amount" id="priceDisplay">Select session type</span>
+        </div>
+        <div class="price-box-row">
+          <span class="price-note">Price set by admin</span>
+        </div>
+      </div>
+
+      <button type="submit" class="sv-submit">Confirm Booking</button>
+
+    </form>
+
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    /* ── Price updater ── */
+    var priceMap = {};
+    var priceScript = document.getElementById("priceData");
+    if (priceScript) priceMap = JSON.parse(priceScript.textContent);
+
+    var sessionSel = document.getElementById("id_session_type");
+    var priceDisplay = document.getElementById("priceDisplay");
+
+    function formatPrice(val) {
+      var n = parseFloat(val);
+      return isNaN(n) ? "Price not available" : "Rs. " + n.toLocaleString("en-IN");
+    }
+
+    function updatePrice(sessionType) {
+      if (!sessionType) { priceDisplay.textContent = "Select session type"; return; }
+      priceDisplay.textContent = priceMap[sessionType]
+        ? formatPrice(priceMap[sessionType])
+        : "Price not set";
+    }
+
+    if (sessionSel) {
+      sessionSel.addEventListener("change", function () { updatePrice(this.value); });
+      if (sessionSel.value) updatePrice(sessionSel.value);
+    }
+
+    /* ── Success modal ──
+       The view redirects to ?booked=1 after a successful booking.
+       We read that param here and show the modal.               */
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("booked") === "1") {
+      document.getElementById("successModal").classList.add("active");
+
+      // Clean the URL so refreshing doesn't re-show the modal
+      var cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+
+  });
+</script>
+
+{% endblock %}

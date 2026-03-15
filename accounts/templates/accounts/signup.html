@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .signup-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .signup-card {
+        width: 100%;
+        max-width: 450px;
+        background: rgba(15, 12, 5, 0.9);
+        border: 1px solid rgba(249, 199, 79, 0.3);
+        border-radius: 20px;
+        padding: 40px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    .signup-title {
+        text-align: center;
+        font-family: "Lora", serif;
+        font-size: 1.7rem;
+        color: #f9c74f;
+        margin-bottom: 10px;
+    }
+
+    .signup-subtitle {
+        text-align: center;
+        color: #aaa;
+        font-size: 0.85rem;
+        margin-bottom: 25px;
+    }
+
+    .signup-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #f9c74f, #f4845f);
+        border: none;
+        border-radius: 10px;
+        color: #1a0f00;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    .signup-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+    }
+
+    .signup-footer a {
+        color: #f9c74f;
+        text-decoration: none;
+    }
+</style>
+
+<div class="signup-wrap">
+
+    <div class="signup-card">
+
+        <h2 class="signup-title">Start Your Journey</h2>
+        <p class="signup-subtitle">Create your Soul Voyage account</p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {% bootstrap_form form %}
+
+            <button type="submit" class="signup-btn">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="signup-footer">
+
+            Already have an account?
+
+            <a href="{% url 'accounts:login' %}">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="margin-top:40px">
+
+    <h2 class="sv-page-header">
+        <i class="fa fa-user-circle"></i> {{ profile_user.username }} Dashboard
+    </h2>
+
+    <div class="row">
+
+        <!-- PROFILE INFO -->
+
+        <div class="col-md-4">
+            <div class="sv-panel">
+
+                <div class="sv-panel-heading">
+                    <h4>Profile Info</h4>
+                </div>
+
+                <div class="sv-panel-body">
+
+                    <p><strong>Name:</strong> {{ profile.full_name }}</p>
+
+                    <p><strong>Email:</strong> {{ profile_user.email }}</p>
+
+                    <p><strong>DOB:</strong> {{ profile.date_of_birth }}</p>
+
+                    <p><strong>Age:</strong> {{ profile.age }}</p>
+
+                    <a href="{% url 'accounts:profile_edit' %}" class="btn-sv">
+                        Edit Profile
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- MEETINGS -->
+
+        <div class="col-md-4">
+            <div class="sv-panel">
+
+                <div class="sv-panel-heading">
+                    <h4>Meetings</h4>
+                </div>
+
+                <div class="sv-panel-body">
+
+                    <h3>{{ profile.meetings_attended }}</h3>
+
+                    <p>Meetings Attended</p>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ORDERS -->
+
+        <div class="col-md-4">
+            <div class="sv-panel">
+
+                <div class="sv-panel-heading">
+                    <h4>Orders</h4>
+                </div>
+
+                <div class="sv-panel-body">
+
+                    <h3>{{ profile.orders }}</h3>
+
+                    <p>Total Orders</p>
+
+                    <p>Status: {{ profile.tracking_status }}</p>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row" style="margin-top:20px">
+
+        <!-- TRACKING -->
+
+        <div class="col-md-6">
+            <div class="sv-panel">
+
+                <div class="sv-panel-heading">
+                    <h4>Order Tracking</h4>
+                </div>
+
+                <div class="sv-panel-body">
+
+                    <p>{{ profile.tracking_status }}</p>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="col-md-6">
+            <div class="sv-panel">
+
+                <div class="sv-panel-heading">
+                    <h4>Support</h4>
+                </div>
+
+                <div class="sv-panel-body">
+
+                    <p>If you need help please contact us.</p>
+
+                    <a href="/contact/" class="btn-sv">Contact Us</a>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

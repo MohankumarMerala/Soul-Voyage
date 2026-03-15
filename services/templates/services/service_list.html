@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.svc-hero{text-align:center;padding:60px 20px 50px;}
+.svc-hero h1{font-family:"Lora",serif;font-size:2.6rem;color:var(--soul-gold);margin-bottom:14px;}
+.svc-hero p{color:var(--soul-muted);font-size:1rem;max-width:580px;margin:0 auto;line-height:1.7;}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px;max-width:1100px;margin:0 auto;padding:0 20px 60px;}
+.svc-card{background:rgba(15,15,35,0.82);border-radius:18px;padding:32px;position:relative;overflow:hidden;transition:all 0.35s;border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);text-decoration:none;display:block;color:inherit;}
+.svc-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.4);text-decoration:none;color:inherit;}
+.svc-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:1.4rem;}
+.svc-title{font-family:"Lora",serif;font-size:1.25rem;color:var(--soul-light);margin-bottom:8px;}
+.svc-tagline{color:var(--soul-muted);font-size:0.83rem;line-height:1.6;margin-bottom:20px;}
+.svc-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.svc-meta-item{font-size:0.76rem;color:var(--soul-muted);display:flex;align-items:center;gap:5px;}
+.svc-price{font-size:1rem;font-weight:700;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);}
+.svc-featured{position:absolute;top:16px;right:16px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--soul-gold);font-size:0.68rem;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;}
+</style>
+<div class="svc-hero">
+  <h1>Our Healing Programs</h1>
+  <p>Scientifically grounded hypnotherapy programs designed to create deep, lasting change. Each journey is tailored to your unique mind.</p>
+</div>
+<div class="svc-grid">
+  {% for svc in services %}
+  <a href="{% url "services:detail" svc.slug %}" class="svc-card" style="border-color:{{ svc.color }}22;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:{{ svc.color }};border-radius:18px 18px 0 0;"></div>
+    {% if svc.is_featured %}<div class="svc-featured">Featured</div>{% endif %}
+    <div class="svc-icon" style="background:{{ svc.color }}22;color:{{ svc.color }};"><i class="fa {{ svc.icon }}"></i></div>
+    <div class="svc-title">{{ svc.title }}</div>
+    <div class="svc-tagline">{{ svc.tagline }}</div>
+    <div class="svc-meta">
+      <div class="svc-meta-item"><i class="fa fa-clock-o"></i> {{ svc.duration }}</div>
+      <div class="svc-meta-item"><i class="fa fa-calendar"></i> {{ svc.sessions_count }} sessions</div>
+    </div>
+    <div class="svc-price" style="color:{{ svc.color }};">Rs. {{ svc.price }}</div>
+  </a>
+  {% empty %}
+  <div style="grid-column:1/-1;text-align:center;color:var(--soul-muted);padding:60px 0;">
+    Run: <code>python manage.py seed_services</code>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

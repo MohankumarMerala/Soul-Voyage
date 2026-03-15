@@ -1,0 +1,777 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .mycontent {
+        padding: 0 !important;
+        background: none !important;
+    }
+
+    .sv-auth-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mandala {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.06;
+        animation: mandala-spin linear infinite;
+        z-index: 0;
+    }
+
+    .mandala-1 {
+        width: 500px;
+        height: 500px;
+        top: -100px;
+        left: -100px;
+        border: 2px solid #f9c74f;
+        animation-duration: 40s;
+    }
+
+    .mandala-2 {
+        width: 350px;
+        height: 350px;
+        bottom: -50px;
+        right: -50px;
+        border: 2px solid #f4845f;
+        animation-duration: 30s;
+        animation-direction: reverse;
+    }
+
+    .mandala-3 {
+        width: 200px;
+        height: 200px;
+        top: 40%;
+        left: 5%;
+        border: 1px solid #4ecdc4;
+        animation-duration: 20s;
+    }
+
+    @keyframes mandala-spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    #cursor-aura {
+        position: fixed;
+        width: 350px;
+        height: 350px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(249, 199, 79, 0.08) 0%, transparent 70%);
+        transition: background 0.5s ease;
+    }
+
+    #cursor-dot {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 2;
+        transform: translate(-50%, -50%);
+        background: #f9c74f;
+        box-shadow: 0 0 12px rgba(249, 199, 79, 0.9);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .particle {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: float-up linear infinite;
+        opacity: 0;
+    }
+
+    @keyframes float-up {
+        0% {
+            transform: translateY(100vh) scale(0);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 0.7;
+        }
+
+        90% {
+            opacity: 0.3;
+        }
+
+        100% {
+            transform: translateY(-20px) scale(1);
+            opacity: 0;
+        }
+    }
+
+    .sv-auth-icon {
+        text-align: center;
+        margin-bottom: 24px;
+        position: relative;
+        height: 90px;
+    }
+
+    #sunflowerWrap {
+        display: inline-block;
+        transform-origin: center bottom;
+        transition: transform 0.15s ease-out;
+    }
+
+    .sunflower-svg {
+        width: 80px;
+        height: 80px;
+        filter: drop-shadow(0 0 14px rgba(249, 199, 79, 0.7));
+        transition: filter 0.4s ease;
+    }
+
+    .sf-petal {
+        transform-origin: 50px 50px;
+        animation: petal-sway 3s ease-in-out infinite;
+    }
+
+    .sf-petal:nth-child(2) {
+        animation-delay: 0.3s;
+    }
+
+    .sf-petal:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+
+    .sf-petal:nth-child(4) {
+        animation-delay: 0.9s;
+    }
+
+    .sf-petal:nth-child(5) {
+        animation-delay: 1.2s;
+    }
+
+    .sf-petal:nth-child(6) {
+        animation-delay: 1.5s;
+    }
+
+    .sf-petal:nth-child(7) {
+        animation-delay: 1.8s;
+    }
+
+    .sf-petal:nth-child(8) {
+        animation-delay: 2.1s;
+    }
+
+    @keyframes petal-sway {
+
+        0%,
+        100% {
+            opacity: 0.85;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    #sunflowerWrap.bow {
+        animation: flower-bow 1.2s ease forwards;
+    }
+
+    @keyframes flower-bow {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        30% {
+            transform: rotate(35deg);
+        }
+
+        50% {
+            transform: rotate(30deg);
+        }
+
+        70% {
+            transform: rotate(33deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+    }
+
+    #sunflowerWrap.success-burst {
+        animation: flower-bloom 0.8s ease forwards;
+    }
+
+    @keyframes flower-bloom {
+        0% {
+            transform: scale(1) rotate(0deg);
+        }
+
+        40% {
+            transform: scale(1.4) rotate(15deg);
+        }
+
+        70% {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        100% {
+            transform: scale(1.1) rotate(0deg);
+        }
+    }
+
+    .light-burst {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(249, 199, 79, 0.6) 0%, transparent 70%);
+        pointer-events: none;
+        transition: all 0.6s ease;
+    }
+
+    .light-burst.show {
+        width: 200px;
+        height: 200px;
+        margin-left: -100px;
+        margin-top: -100px;
+    }
+
+    .sv-auth-card {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 440px;
+        background: rgba(15, 12, 5, 0.88);
+        border: 1px solid rgba(249, 199, 79, 0.25);
+        border-radius: 20px;
+        padding: 40px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.5s ease, border-color 0.5s ease;
+        animation: card-appear 0.8s ease both;
+    }
+
+    @keyframes card-appear {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .sv-auth-card.error-state {
+        border-color: rgba(231, 76, 60, 0.5) !important;
+        box-shadow: 0 0 40px rgba(231, 76, 60, 0.15), 0 30px 80px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .sv-auth-card.success-state {
+        border-color: rgba(249, 199, 79, 0.8) !important;
+        box-shadow: 0 0 80px rgba(249, 199, 79, 0.3), 0 30px 80px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        15%,
+        55% {
+            transform: translateX(-9px);
+        }
+
+        35%,
+        75% {
+            transform: translateX(9px);
+        }
+    }
+
+    .sv-auth-card.shake {
+        animation: shake 0.55s ease;
+    }
+
+    .sv-auth-title {
+        text-align: center;
+        font-family: "Lora", serif;
+        font-size: 1.6rem;
+        color: #f9c74f;
+        margin: 0 0 6px;
+    }
+
+    .sv-auth-subtitle {
+        text-align: center;
+        color: var(--soul-muted);
+        font-size: 0.82rem;
+        margin-bottom: 30px;
+        letter-spacing: 0.5px;
+    }
+
+    .sv-field {
+        margin-bottom: 18px;
+        position: relative;
+    }
+
+    .sv-field label {
+        display: block;
+        color: var(--soul-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+
+    .sv-field input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(249, 199, 79, 0.2);
+        border-radius: 10px;
+        padding: 12px 16px;
+        color: #f0ead6;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        outline: none;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .sv-field input:focus {
+        border-color: #f9c74f;
+        background: rgba(249, 199, 79, 0.06);
+        box-shadow: 0 0 0 3px rgba(249, 199, 79, 0.1);
+    }
+
+    .sv-field input.error {
+        border-color: rgba(231, 76, 60, 0.7);
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+
+    .sv-field input.valid {
+        border-color: rgba(78, 205, 196, 0.7);
+        box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+    }
+
+    .sv-field-error {
+        color: #e74c3c;
+        font-size: 0.75rem;
+        margin-top: 5px;
+        display: none;
+        animation: fadeInDown 0.3s ease;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .sv-errors {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        color: #e74c3c;
+        font-size: 0.82rem;
+    }
+
+    .sv-auth-btn {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(135deg, #f9c74f, #f4845f);
+        border: none;
+        border-radius: 10px;
+        color: #1a0f00;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Montserrat", sans-serif;
+        margin-top: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sv-auth-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .sv-auth-btn:hover::before {
+        left: 100%;
+    }
+
+    .sv-auth-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(249, 199, 79, 0.4);
+    }
+
+    .sv-auth-btn.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .sv-auth-footer {
+        text-align: center;
+        margin-top: 24px;
+        color: var(--soul-muted);
+        font-size: 0.82rem;
+    }
+
+    .sv-auth-footer a {
+        color: #f9c74f;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .sv-auth-footer a:hover {
+        color: #f4845f;
+    }
+
+    .sv-auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+    .sv-auth-divider::before,
+    .sv-auth-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(249, 199, 79, 0.15);
+    }
+
+    .sv-auth-divider span {
+        color: var(--soul-muted);
+        font-size: 0.75rem;
+    }
+
+    .ripple {
+        position: fixed;
+        border-radius: 50%;
+        border: 2px solid rgba(249, 199, 79, 0.5);
+        pointer-events: none;
+        z-index: 5;
+        animation: ripple-out 1s ease-out forwards;
+        transform: translate(-50%, -50%);
+    }
+
+    @keyframes ripple-out {
+        from {
+            width: 0;
+            height: 0;
+            opacity: 0.9;
+        }
+
+        to {
+            width: 320px;
+            height: 320px;
+            opacity: 0;
+        }
+    }
+
+    .golden-ray {
+        position: fixed;
+        pointer-events: none;
+        z-index: 0;
+        width: 2px;
+        background: linear-gradient(to top, rgba(249, 199, 79, 0.6), transparent);
+        transform-origin: bottom center;
+        animation: ray-expand 1s ease forwards;
+    }
+
+    @keyframes ray-expand {
+        from {
+            height: 0;
+            opacity: 0.8;
+        }
+
+        to {
+            height: 300px;
+            opacity: 0;
+        }
+    }
+</style>
+
+<div id="cursor-aura"></div>
+<div id="cursor-dot"></div>
+<div class="mandala mandala-1"></div>
+<div class="mandala mandala-2"></div>
+<div class="mandala mandala-3"></div>
+
+<div class="sv-auth-wrap">
+    <div class="sv-auth-card" id="authCard" data-errors="{{ form.errors|yesno:'1,0' }}">
+        <div class="sv-auth-icon">
+            <div class="light-burst" id="lightBurst"></div>
+            <div id="sunflowerWrap">
+                <svg class="sunflower-svg" id="sunflowerSvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#8B4513" />
+                            <stop offset="60%" style="stop-color:#5C2E00" />
+                            <stop offset="100%" style="stop-color:#3B1A00" />
+                        </radialGradient>
+                        <radialGradient id="petalGrad" cx="50%" cy="30%" r="70%">
+                            <stop offset="0%" style="stop-color:#FFE566" />
+                            <stop offset="50%" style="stop-color:#F9C74F" />
+                            <stop offset="100%" style="stop-color:#E8A020" />
+                        </radialGradient>
+                    </defs>
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.95" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(45 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(90 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(135 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(180 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(225 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(270 50 50)" />
+                    <ellipse class="sf-petal" cx="50" cy="18" rx="5" ry="14" fill="url(#petalGrad)" opacity="0.9"
+                        transform="rotate(315 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(22.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(67.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(112.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(157.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(202.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(247.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(292.5 50 50)" />
+                    <ellipse cx="50" cy="22" rx="4" ry="11" fill="#FFD700" opacity="0.7"
+                        transform="rotate(337.5 50 50)" />
+                    <circle cx="50" cy="50" r="18" fill="url(#centerGrad)" />
+                    <circle cx="50" cy="42" r="2" fill="rgba(255,200,100,0.4)" />
+                    <circle cx="44" cy="45" r="2" fill="rgba(255,200,100,0.4)" />
+                    <circle cx="56" cy="45" r="2" fill="rgba(255,200,100,0.4)" />
+                    <circle cx="42" cy="52" r="2" fill="rgba(255,200,100,0.35)" />
+                    <circle cx="50" cy="50" r="2" fill="rgba(255,200,100,0.5)" />
+                    <circle cx="58" cy="52" r="2" fill="rgba(255,200,100,0.35)" />
+                    <circle cx="45" cy="58" r="2" fill="rgba(255,200,100,0.3)" />
+                    <circle cx="55" cy="58" r="2" fill="rgba(255,200,100,0.3)" />
+                    <line x1="50" y1="68" x2="50" y2="100" stroke="#4a7c2f" stroke-width="3" stroke-linecap="round" />
+                    <ellipse cx="42" cy="82" rx="8" ry="4" fill="#5a9e3a" opacity="0.8" transform="rotate(-30 42 82)" />
+                </svg>
+            </div>
+        </div>
+        <h2 class="sv-auth-title">Welcome Back</h2>
+        <p class="sv-auth-subtitle">Let the sunlight guide your way</p>
+        {% if form.errors %}
+        <div class="sv-errors">
+            <i class="fa fa-exclamation-triangle"></i>
+
+            {% for field in form %}
+            {% for error in field.errors %}
+            {{ error }}
+            {% endfor %}
+            {% endfor %}
+
+            {% for error in form.non_field_errors %}
+            {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <form method="POST" id="loginForm" novalidate>
+            {% csrf_token %}
+            <div class="sv-field">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" placeholder="Your username" autocomplete="username"
+                    value="{{ form.username.value|default:'' }}">
+                <span class="sv-field-error" id="usernameError">Please enter your username</span>
+            </div>
+            <div class="sv-field">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" placeholder="Your password"
+                    autocomplete="current-password">
+                <span class="sv-field-error" id="passwordError">Please enter your password</span>
+            </div>
+            <button type="submit" class="sv-auth-btn" id="loginBtn"><span id="btnText">Enter the Voyage</span></button>
+        </form>
+        <div style="text-align:center; margin-bottom: 12px;">
+            <a href="{% url 'accounts:password_reset' %}"
+                style="color:rgba(201,168,76,0.75); font-size:0.82rem; text-decoration:none;">
+                Forgot your password?
+            </a>
+        </div>
+        <div class="sv-auth-divider"><span>or</span></div>
+        <div class="sv-auth-footer">New to Soul Voyage? <a href="{% url 'accounts:signup' %}">Begin your journey</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var aura = document.getElementById("cursor-aura");
+        var dot = document.getElementById("cursor-dot");
+        var card = document.getElementById("authCard");
+        var wrap = document.getElementById("sunflowerWrap");
+        var svg = document.getElementById("sunflowerSvg");
+        var lightBurst = document.getElementById("lightBurst");
+        var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+        var ax = mx, ay = my;
+        var cardRect;
+
+        function updateCardRect() { cardRect = card.getBoundingClientRect(); }
+        updateCardRect();
+        window.addEventListener("resize", updateCardRect);
+
+        document.addEventListener("mousemove", function (e) {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + "px"; dot.style.top = my + "px";
+            var iconEl = document.querySelector(".sv-auth-icon");
+            var iconRect = iconEl.getBoundingClientRect();
+            var iconCX = iconRect.left + iconRect.width / 2;
+            var iconCY = iconRect.top + iconRect.height / 2;
+            var dx = mx - iconCX;
+            var dy = my - iconCY;
+            var angle = Math.atan2(dx, -dy) * (180 / Math.PI);
+            var clampedAngle = Math.max(-30, Math.min(30, angle * 0.4));
+            if (!wrap.classList.contains("bow") && !wrap.classList.contains("success-burst")) {
+                wrap.style.transform = "rotate(" + clampedAngle + "deg)";
+            }
+            var inCard = mx > cardRect.left && mx < cardRect.right && my > cardRect.top && my < cardRect.bottom;
+            aura.style.background = inCard
+                ? "radial-gradient(circle, rgba(249,199,79,0.12) 0%, transparent 70%)"
+                : "radial-gradient(circle, rgba(249,199,79,0.06) 0%, transparent 70%)";
+        });
+
+        function animateAura() {
+            ax += (mx - ax) * 0.07; ay += (my - ay) * 0.07;
+            aura.style.left = ax + "px"; aura.style.top = ay + "px";
+            requestAnimationFrame(animateAura);
+        }
+        animateAura();
+
+        document.addEventListener("click", function (e) {
+            var r = document.createElement("div");
+            r.className = "ripple";
+            r.style.left = e.clientX + "px"; r.style.top = e.clientY + "px";
+            document.body.appendChild(r);
+            setTimeout(function () { r.remove(); }, 1000);
+        });
+
+        var colors = ["#f9c74f", "#f4845f", "#4ecdc4", "#ffe08a"];
+        function spawnParticle() {
+            var p = document.createElement("div");
+            p.className = "particle";
+            p.style.left = Math.random() * 100 + "vw";
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDuration = (8 + Math.random() * 12) + "s";
+            p.style.animationDelay = (Math.random() * 5) + "s";
+            p.style.width = p.style.height = (2 + Math.random() * 4) + "px";
+            document.body.appendChild(p);
+            setTimeout(function () { p.remove(); }, 20000);
+        }
+        setInterval(spawnParticle, 400);
+
+        var usernameInput = document.getElementById("id_username");
+        var passwordInput = document.getElementById("id_password");
+        var form = document.getElementById("loginForm");
+        var btn = document.getElementById("loginBtn");
+        var btnText = document.getElementById("btnText");
+
+        usernameInput.addEventListener("input", function () {
+            if (this.value.length > 0) { this.classList.remove("error"); this.classList.add("valid"); document.getElementById("usernameError").style.display = "none"; }
+        });
+        passwordInput.addEventListener("input", function () {
+            if (this.value.length > 0) { this.classList.remove("error"); this.classList.add("valid"); document.getElementById("passwordError").style.display = "none"; }
+        });
+
+        form.addEventListener("submit", function (e) {
+            var valid = true;
+            if (!usernameInput.value.trim()) { e.preventDefault(); usernameInput.classList.add("error"); document.getElementById("usernameError").style.display = "block"; valid = false; }
+            if (!passwordInput.value.trim()) { e.preventDefault(); passwordInput.classList.add("error"); document.getElementById("passwordError").style.display = "block"; valid = false; }
+            if (valid) { btnText.textContent = "Journeying..."; btn.classList.add("loading"); triggerSuccess(); }
+        });
+
+        function triggerSuccess() {
+            card.classList.add("success-state");
+            lightBurst.classList.add("show");
+            wrap.style.transform = "none";
+            wrap.classList.add("success-burst");
+            svg.style.filter = "drop-shadow(0 0 30px rgba(249,199,79,1)) drop-shadow(0 0 60px rgba(249,199,79,0.6))";
+            aura.style.background = "radial-gradient(circle, rgba(249,199,79,0.2) 0%, transparent 70%)";
+            dot.style.background = "#fff";
+            dot.style.boxShadow = "0 0 20px rgba(249,199,79,1)";
+            for (var i = 0; i < 12; i++) {
+                (function (idx) {
+                    setTimeout(function () {
+                        var ray = document.createElement("div");
+                        ray.className = "golden-ray";
+                        var iconEl = document.querySelector(".sv-auth-icon");
+                        var rect = iconEl.getBoundingClientRect();
+                        ray.style.left = (rect.left + rect.width / 2) + "px";
+                        ray.style.top = (rect.top + rect.height / 2) + "px";
+                        ray.style.transform = "rotate(" + (idx * 30) + "deg)";
+                        document.body.appendChild(ray);
+                        setTimeout(function () { ray.remove(); }, 1000);
+                    }, idx * 60);
+                })(i);
+            }
+        }
+
+        function triggerError() {
+            card.classList.add("error-state", "shake");
+            wrap.style.transform = "none";
+            wrap.classList.add("bow");
+            svg.style.filter = "drop-shadow(0 0 14px rgba(231,76,60,0.8)) saturate(0.4)";
+            aura.style.background = "radial-gradient(circle, rgba(231,76,60,0.12) 0%, transparent 70%)";
+            dot.style.background = "#e74c3c";
+            dot.style.boxShadow = "0 0 12px rgba(231,76,60,0.9)";
+            setTimeout(function () {
+                card.classList.remove("shake", "error-state");
+                wrap.classList.remove("bow");
+                svg.style.filter = "drop-shadow(0 0 14px rgba(249,199,79,0.7))";
+                aura.style.background = "radial-gradient(circle, rgba(249,199,79,0.08) 0%, transparent 70%)";
+                dot.style.background = "#f9c74f";
+                dot.style.boxShadow = "0 0 12px rgba(249,199,79,0.9)";
+            }, 1400);
+        }
+
+        if (card.getAttribute("data-errors") === "1") {
+            setTimeout(triggerError, 300);
+        }
+    })();
+</script>
+{% endblock %}

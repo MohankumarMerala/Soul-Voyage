@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row" style="margin-bottom:30px;">
+    <div class="col-lg-12">
+        <div
+            style="background:rgba(30,30,63,0.7);border:1px solid rgba(124,106,247,0.2);border-radius:12px;padding:20px;">
+            <form method="GET" action="{% url 'events:list' %}" id="filterForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label style="color:var(--soul-gold);font-size:0.82rem;">Filter by Year</label>
+                        <select name="year" id="yearSelect" class="form-control"
+                            style="background:rgba(255,255,255,0.07);border:1px solid rgba(124,106,247,0.3);color:var(--soul-light);border-radius:6px;"
+                            onchange="this.form.submit()">
+                            <option value="">All Years</option>
+                            {% for y in all_years %}
+                            <option value="{{ y|date:'Y' }}">{{ y|date:"Y" }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label style="color:var(--soul-gold);font-size:0.82rem;">Filter by Month</label>
+                        <select name="month" id="monthSelect" class="form-control"
+                            style="background:rgba(255,255,255,0.07);border:1px solid rgba(124,106,247,0.3);color:var(--soul-light);border-radius:6px;"
+                            onchange="this.form.submit()">
+                            <option value="">All Months</option>
+                            {% for num, name in months %}
+                            <option value="{{ num }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4" style="padding-top:24px;">
+                        <a href="{% url 'events:list' %}"
+                            style="border:1px solid rgba(124,106,247,0.4);color:var(--soul-muted);border-radius:20px;padding:7px 20px;font-size:0.82rem;text-decoration:none;display:inline-block;">Clear
+                            Filters</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="sv-page-header">Upcoming Events ({{ upcoming_events|length }})</h2>
+    </div>
+</div>
+<div class="row">
+    {% for event in upcoming_events %}
+    <div class="col-md-4">
+        <div class="sv-panel">
+            {% if event.image %}
+            <img src="{{ event.image.url }}"
+                style="width:100%;border-radius:8px 8px 0 0;max-height:200px;object-fit:cover;">
+            {% endif %}
+            <div class="sv-panel-heading">
+                <h4>{{ event.title }}</h4>
+            </div>
+            <div class="sv-panel-body">
+                <p><strong style="color:var(--soul-gold);">By:</strong> {{ event.conducted_by }}</p>
+                <p><strong style="color:var(--soul-gold);">Start:</strong> {{ event.start_time|date:"d M Y, h:i A" }}
+                </p>
+                <p><strong style="color:var(--soul-gold);">End:</strong> {{ event.end_time|date:"d M Y, h:i A" }}</p>
+                <p>{{ event.description|truncatewords:20 }}</p>
+                <a href="{% url 'events:detail' event.pk %}" class="btn btn-sv">View Details</a>
+                {% if event.meeting_link %}
+                <a href="{{ event.meeting_link }}" target="_blank"
+                    style="display:inline-block;margin-top:8px;background:linear-gradient(135deg,#7c6af7,#5c4fd6);color:#fff;border-radius:20px;padding:6px 20px;font-size:0.82rem;text-decoration:none;">Join
+                    Call</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-lg-12">
+        <p style="color:var(--soul-muted);">No upcoming events.</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="row" style="margin-top:50px;">
+    <div class="col-lg-12">
+        <h2 class="sv-page-header" style="border-color:var(--soul-gold);opacity:0.8;">Completed Events
+            ({{completed_events|length }})</h2>
+    </div>
+</div>
+<div class="row">
+    {% for event in completed_events %}
+    <div class="col-md-4">
+        <div class="sv-panel" style="opacity:0.7;">
+            {% if event.image %}
+            <div style="position:relative;">
+                <img src="{{ event.image.url }}"
+                    style="width:100%;border-radius:8px 8px 0 0;max-height:200px;object-fit:cover;filter:grayscale(60%);">
+                <span
+                    style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:var(--soul-gold);padding:4px 10px;border-radius:12px;font-size:0.75rem;">Completed</span>
+            </div>
+            {% endif %}
+            <div class="sv-panel-heading">
+                <h4>{{ event.title }}</h4>
+            </div>
+            <div class="sv-panel-body">
+                <p><strong style="color:var(--soul-gold);">By:</strong> {{ event.conducted_by }}</p>
+                <p><strong style="color:var(--soul-gold);">Was:</strong> {{ event.start_time|date:"d M Y, h:i A" }}</p>
+                <p>{{ event.description|truncatewords:20 }}</p>
+                <a href="{% url 'events:detail' event.pk %}" class="btn btn-sv">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-lg-12">
+        <p style="color:var(--soul-muted);">No completed events.</p>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('year')) document.getElementById('yearSelect').value = params.get('year');
+    if (params.get('month')) document.getElementById('monthSelect').value = params.get('month');
+</script>
+{% endblock %}

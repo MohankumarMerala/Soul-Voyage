@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.svc-dh{padding:60px 20px 30px;max-width:800px;margin:0 auto;}
+.svc-dh a{color:var(--soul-muted);font-size:0.82rem;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;}
+.svc-dh a:hover{color:var(--soul-gold);}
+.svc-dh-icon{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:20px;}
+.svc-dh h1{font-family:"Lora",serif;font-size:2.2rem;margin-bottom:10px;}
+.svc-dh-tag{font-size:1.05rem;color:var(--soul-muted);margin-bottom:0;font-style:italic;}
+.svc-body{max-width:800px;margin:0 auto;padding:0 20px 40px;}
+.svc-sec{background:rgba(15,15,35,0.8);border-radius:16px;padding:28px 32px;margin-bottom:20px;border-left:4px solid;backdrop-filter:blur(10px);}
+.svc-sec h3{font-family:"Lora",serif;font-size:1.1rem;margin-bottom:14px;}
+.svc-sec p{color:var(--soul-muted);line-height:1.75;font-size:0.9rem;margin:0;}
+.outcomes-list{list-style:none;padding:0;margin:0;}
+.outcomes-list li{color:var(--soul-muted);font-size:0.9rem;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:10px;line-height:1.5;}
+.svc-book-card{background:rgba(15,15,35,0.9);border-radius:16px;padding:28px;border:1px solid rgba(201,168,76,0.2);margin:0 20px 32px;max-width:760px;margin-left:auto;margin-right:auto;backdrop-filter:blur(12px);}
+.svc-book-card h3{font-family:"Lora",serif;color:var(--soul-gold);margin-bottom:16px;}
+.svc-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.svc-row span{color:var(--soul-muted);font-size:0.85rem;}
+.svc-row strong{color:var(--soul-light);font-size:0.9rem;}
+.svc-cta{display:block;width:100%;padding:14px;background:linear-gradient(135deg,var(--soul-gold),#b8942a);color:#0d0d1a;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;transition:all 0.3s;font-family:"Montserrat",sans-serif;margin-top:20px;}
+.svc-cta:hover{color:#0d0d1a;box-shadow:0 8px 24px rgba(201,168,76,0.35);transform:translateY(-2px);}
+.other-wrap{max-width:800px;margin:0 auto;padding:0 20px 60px;}
+.other-wrap h3{font-family:"Lora",serif;color:var(--soul-gold);margin-bottom:20px;}
+.other-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;}
+.other-card{background:rgba(15,15,35,0.7);border-radius:12px;padding:16px;text-decoration:none;display:block;border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;}
+.other-card:hover{border-color:var(--soul-gold);transform:translateY(-3px);}
+.other-card-title{font-size:0.85rem;color:var(--soul-light);font-family:"Lora",serif;margin-bottom:4px;}
+.other-card-dur{font-size:0.75rem;color:var(--soul-muted);}
+</style>
+<div class="svc-dh">
+  <a href="{% url "services:list" %}"><i class="fa fa-arrow-left"></i> All Programs</a>
+  <div class="svc-dh-icon" style="background:{{ service.color }}22;color:{{ service.color }};"><i class="fa {{ service.icon }}"></i></div>
+  <h1 style="color:{{ service.color }};">{{ service.title }}</h1>
+  <p class="svc-dh-tag">{{ service.tagline }}</p>
+</div>
+<div class="svc-body">
+  <div class="svc-sec" style="border-color:{{ service.color }};">
+    <h3 style="color:{{ service.color }};"><i class="fa fa-question-circle"></i> The Problem</h3>
+    <p>{{ service.problem }}</p>
+  </div>
+  <div class="svc-sec" style="border-color:{{ service.color }};">
+    <h3 style="color:{{ service.color }};"><i class="fa fa-magic"></i> Our Approach</h3>
+    <p>{{ service.process }}</p>
+  </div>
+  <div class="svc-sec" style="border-color:{{ service.color }};">
+    <h3 style="color:{{ service.color }};"><i class="fa fa-star"></i> Expected Outcomes</h3>
+    <ul class="outcomes-list">
+      {% for outcome in service.outcomes_list %}
+      <li><span style="color:{{ service.color }};">✦</span><span>{{ outcome }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class="svc-book-card">
+  <h3>Program Details</h3>
+  <div class="svc-row"><span><i class="fa fa-clock-o"></i> Duration</span><strong>{{ service.duration }}</strong></div>
+  <div class="svc-row"><span><i class="fa fa-calendar"></i> Sessions</span><strong>{{ service.sessions_count }} sessions</strong></div>
+  <div class="svc-row"><span><i class="fa fa-money"></i> Investment</span><strong style="color:var(--soul-gold);">Rs. {{ service.price }} per session</strong></div>
+  <a href="{% url "appointments:book" %}" class="svc-cta">Book This Program</a>
+</div>
+{% if other_services %}
+<div class="other-wrap">
+  <h3>Other Programs</h3>
+  <div class="other-grid">
+    {% for s in other_services %}
+    <a href="{% url "services:detail" s.slug %}" class="other-card">
+      <div style="color:{{ s.color }};font-size:1.1rem;margin-bottom:8px;"><i class="fa {{ s.icon }}"></i></div>
+      <div class="other-card-title">{{ s.title }}</div>
+      <div class="other-card-dur">{{ s.sessions_count }} sessions</div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,28 @@
+/* master.css — Soul Voyage
+   Cleaned: removed conflicting background, overflow:hidden, debug border
+*/
+
+.mycontent {
+  padding-top: 80px;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  /* overflow: hidden  ← REMOVED — was clipping navbar and scroll */
+  /* background: #191063 ← REMOVED — was overriding black space theme */
+  margin: 0;
+}
+
+#note {
+  position: absolute;
+  color: rgba(249, 241, 204, 1);
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  margin: auto;
+  text-align: center;
+  user-select: none;
+  font-family: Arial;
+}

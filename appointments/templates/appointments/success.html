@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="text-align:center;padding:80px 20px;">
+  <div style="font-size:4rem;margin-bottom:20px;">&#9728;</div>
+  <h2 style="font-family:Lora,serif;color:var(--soul-gold);font-size:2rem;margin-bottom:12px;">Appointment Booked!</h2>
+  <p style="color:var(--soul-muted);max-width:440px;margin:0 auto 32px;">A confirmation email has been sent. We look forward to your healing journey.</p>
+  <a href="{% url "appointments:my_appointments" %}" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,var(--soul-gold),#b8942a);color:#0d0d1a;border-radius:10px;font-weight:700;text-decoration:none;">View My Appointments</a>
+</div>
+{% endblock %}

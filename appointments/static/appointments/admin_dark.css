@@ -1,0 +1,42 @@
+
+/* Dark theme fixes for time/date pickers in Soul Voyage admin */
+input[type="time"],
+input[type="date"] {
+    background: #1a1a3a !important;
+    color: #f0ead6 !important;
+    border: 1px solid rgba(201,168,76,0.4) !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 0.9rem !important;
+    min-width: 130px;
+    colorscheme: dark;
+}
+
+input[type="time"]:focus,
+input[type="date"]:focus {
+    border-color: #c9a84c !important;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.2) !important;
+    outline: none !important;
+}
+
+/* Style the calendar/clock popup icon */
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8) sepia(1) saturate(3) hue-rotate(5deg);
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator:hover,
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Inline tabular fixes */
+.dynamic-slots input[type="time"],
+.dynamic-slots input[type="date"] {
+    min-width: 120px;
+}
+
+/* Make inline table more readable */
+.inline-group .tabular td { padding: 8px 6px !important; }

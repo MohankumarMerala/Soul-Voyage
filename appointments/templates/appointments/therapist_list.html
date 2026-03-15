@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.appt-hero{text-align:center;padding:60px 20px 40px;}
+.appt-hero h1{font-family:"Lora",serif;font-size:2.4rem;color:var(--soul-gold);margin-bottom:12px;}
+.appt-hero p{color:var(--soul-muted);max-width:560px;margin:0 auto 32px;}
+.therapist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1100px;margin:0 auto;padding:0 20px 60px;}
+.therapist-card{background:rgba(15,15,35,0.8);border:1px solid rgba(124,106,247,0.2);border-radius:16px;padding:30px;text-align:center;transition:all 0.3s;backdrop-filter:blur(12px);}
+.therapist-card:hover{border-color:var(--soul-gold);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+.therapist-avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--soul-accent),var(--soul-gold));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2rem;color:#fff;}
+.therapist-name{font-family:"Lora",serif;font-size:1.2rem;color:var(--soul-gold);margin-bottom:6px;}
+.therapist-spec{color:var(--soul-accent);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.therapist-bio{color:var(--soul-muted);font-size:0.85rem;line-height:1.6;margin-bottom:16px;}
+.therapist-exp{background:rgba(124,106,247,0.1);border-radius:8px;padding:6px 12px;display:inline-block;color:var(--soul-light);font-size:0.8rem;margin-bottom:20px;}
+.sv-btn{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,var(--soul-accent),#5c4fd6);color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;transition:all 0.3s;}
+.sv-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,106,247,0.4);color:#fff;}
+.sv-btn-gold{background:linear-gradient(135deg,var(--soul-gold),#b8942a);color:#0d0d1a;}
+.sv-btn-gold:hover{color:#0d0d1a;}
+</style>
+<div class="appt-hero">
+  <h1>Meet Our Healers</h1>
+  <p>Experienced hypnotherapists dedicated to your transformation.</p>
+  <a href="{% url "appointments:book" %}" class="sv-btn sv-btn-gold">Book a Session</a>
+</div>
+<div class="therapist-grid">
+  {% for t in therapists %}
+  <div class="therapist-card">
+    <div class="therapist-avatar">
+      {% if t.photo %}<img src="{{ t.photo.url }}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;">
+      {% else %}<i class="fa fa-user"></i>{% endif %}
+    </div>
+    <div class="therapist-name">{{ t.name }}</div>
+    <div class="therapist-spec">{{ t.speciality }}</div>
+    <div class="therapist-bio">{{ t.bio|truncatewords:30 }}</div>
+    <div class="therapist-exp"><i class="fa fa-clock-o"></i> {{ t.experience }} years</div><br>
+    <a href="{% url "appointments:book" %}" class="sv-btn">Book Session</a>
+  </div>
+  {% empty %}
+  <div style="text-align:center;color:var(--soul-muted);grid-column:1/-1;padding:60px 0;">
+    <i class="fa fa-user-md" style="font-size:3rem;display:block;margin-bottom:16px;"></i>
+    Add therapists via <a href="/admin/appointments/therapist/" style="color:var(--soul-gold);">/admin</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.my-wrap{max-width:860px;margin:40px auto;padding:0 20px 60px;}
+.my-title{font-family:"Lora",serif;font-size:1.8rem;color:var(--soul-gold);margin-bottom:6px;}
+.my-sub{color:var(--soul-muted);font-size:0.85rem;margin-bottom:28px;}
+.appt-card{background:rgba(15,15,35,0.85);border:1px solid rgba(124,106,247,0.2);border-radius:14px;padding:24px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;backdrop-filter:blur(10px);transition:border-color 0.3s;}
+.appt-card:hover{border-color:var(--soul-gold);}
+.appt-info h4{font-family:"Lora",serif;color:var(--soul-gold);margin:0 0 6px;font-size:1rem;}
+.appt-info p{color:var(--soul-muted);font-size:0.82rem;margin:3px 0;}
+.appt-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;text-transform:uppercase;}
+.badge-pending{background:rgba(249,199,79,0.15);color:#f9c74f;}
+.badge-confirmed{background:rgba(78,205,196,0.15);color:#4ecdc4;}
+.badge-cancelled{background:rgba(231,76,60,0.12);color:#e74c3c;}
+.badge-completed{background:rgba(124,106,247,0.15);color:var(--soul-accent);}
+.cancel-btn{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);color:#e74c3c;padding:7px 16px;border-radius:8px;font-size:0.8rem;cursor:pointer;transition:all 0.3s;font-family:"Montserrat",sans-serif;}
+.cancel-btn:hover{background:rgba(231,76,60,0.2);}
+.book-new{display:inline-block;padding:11px 28px;background:linear-gradient(135deg,var(--soul-gold),#b8942a);color:#0d0d1a;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.9rem;margin-bottom:28px;}
+.book-new:hover{color:#0d0d1a;box-shadow:0 8px 20px rgba(201,168,76,0.3);}
+</style>
+<div class="my-wrap">
+  <h2 class="my-title">My Appointments</h2>
+  <p class="my-sub">Track and manage your healing sessions</p>
+  <a href="{% url "appointments:book" %}" class="book-new">Book New Session</a>
+  {% for appt in appointments %}
+  <div class="appt-card">
+    <div class="appt-info">
+      <h4>{{ appt.get_session_type_display }} <span class="appt-badge badge-{{ appt.status }}">{{ appt.status }}</span></h4>
+      <p><i class="fa fa-user-md"></i> {{ appt.therapist.name }}</p>
+      <p><i class="fa fa-calendar"></i> {{ appt.slot.date }} at {{ appt.slot.start_time }}</p>
+      <p><i class="fa fa-money"></i> Rs.{{ appt.amount }}
+        {% if appt.payment_done %}<span style="color:#4ecdc4;margin-left:8px;"><i class="fa fa-check-circle"></i> Paid</span>
+        {% else %}<span style="color:#f9c74f;margin-left:8px;"><i class="fa fa-clock-o"></i> Pending</span>{% endif %}
+      </p>
+    </div>
+    <div>
+      {% if appt.status == "pending" %}
+      <form method="POST" action="{% url "appointments:cancel" appt.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="cancel-btn" onclick="return confirm('Cancel this appointment?')">Cancel</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div style="text-align:center;padding:60px 0;color:var(--soul-muted);">
+    <i class="fa fa-calendar-o" style="font-size:3rem;display:block;margin-bottom:16px;"></i>
+    No appointments yet. <a href="{% url "appointments:book" %}" style="color:var(--soul-gold);">Book your first session</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
