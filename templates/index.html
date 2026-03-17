@@ -392,8 +392,6 @@
         color: rgba(232, 228, 240, 0.55);
         text-transform: uppercase;
         letter-spacing: 1px;
-        display: block;
-        margin-top: 6px;
     }
 
     /* ── TESTIMONIALS ── */
@@ -784,24 +782,23 @@
     <div class="hp-test-grid">
         <div class="hp-test-card">
             <div class="hp-test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="hp-test-quote">"After 15 years of smoking, I quit in two sessions. I still can't believe it. The
-                craving just... disappeared."</div>
-            <div class="hp-test-author">Rajesh M.</div>
-            <div class="hp-test-service">Smoking Cessation Program</div>
+            <div class="hp-test-quote">"We are not human beings on a spiritual journey. We are spiritual beings on a
+                human journey."</div>
+            <div class="hp-test-author">Dr Shweta Malik</div>
+            <div class="hp-test-service">Spiritual Journey</div>
         </div>
         <div class="hp-test-card">
             <div class="hp-test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="hp-test-quote">"The anxiety that ruled my life for years faded after session three. I finally
-                feel like myself again."</div>
-            <div class="hp-test-author">Priya S.</div>
-            <div class="hp-test-service">Anxiety & Stress Relief</div>
+            <div class="hp-test-quote">"Being lost to just Being."</div>
+            <div class="hp-test-author">Dr Shweta Malik</div>
+            <div class="hp-test-service">Self Discovery</div>
         </div>
         <div class="hp-test-card">
             <div class="hp-test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div class="hp-test-quote">"I sleep through the night for the first time in years. The sleep audio they gave
-                me is pure magic."</div>
-            <div class="hp-test-author">Arjun K.</div>
-            <div class="hp-test-service">Sleep Improvement</div>
+            <div class="hp-test-quote">"BE THE CHANGE YOU WISH TO SEE IN OTHERS. BECAUSE JOURNEY ALWAYS STARTS
+                WITH YOU. LOVE PEACE AND LIGHT"</div>
+            <div class="hp-test-author">Dr Shweta Malik</div>
+            <div class="hp-test-service">Self Discovery</div>
         </div>
     </div>
 </div>
@@ -836,10 +833,10 @@
         var rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight && !statsTriggered) {
             statsTriggered = true;
-            animateCounter(document.getElementById("stat1"), {{ sessions_completed }}, "+");
-            animateCounter(document.getElementById("stat2"), {{ happy_clients }}, "+");
-            animateCounter(document.getElementById("stat3"), {{ programs_available }}, "");
-            animateCounter(document.getElementById("stat4"), {{ years_experience }}, "+");
+            animateCounter(document.getElementById("stat1"), 1240, "+");
+            animateCounter(document.getElementById("stat2"), 890, "+");
+            animateCounter(document.getElementById("stat3"), 6, "");
+            animateCounter(document.getElementById("stat4"), 12, "+");
         }
     }
     window.addEventListener("scroll", checkStats);
