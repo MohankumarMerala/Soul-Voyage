@@ -3,6 +3,9 @@ name: Keep Render Alive
 on:
   schedule:
     - cron: '*/10 * * * *'
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -11,5 +14,10 @@ jobs:
     steps:
       - name: Ping Soul Voyage
         run: |
-          curl -s https://soul-voyage.onrender.com > /dev/null
-          echo "Pinged at $(date)"
+          STATUS=$(curl -L -s -o /dev/null -w "%{http_code}" https://soul-voyage.onrender.com)
+          echo "Pinged at $(date) - Status: $STATUS"
+          if [ $STATUS -eq 200 ]; then
+            echo "Site is UP"
+          else
+            echo "Site returned $STATUS - may still be waking up"
+          fi
