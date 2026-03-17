@@ -1,0 +1,15 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Soul Voyage
+        run: |
+          curl -s https://soul-voyage.onrender.com > /dev/null
+          echo "Pinged at $(date)"
