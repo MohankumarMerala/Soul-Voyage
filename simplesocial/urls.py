@@ -19,9 +19,14 @@ from django.conf import settings
 from django.contrib import admin
 from . import views
 from django.views.generic import TemplateView
+from django.http import JsonResponse
+
+def health_check(request):
+    return JsonResponse({"status": "ok", "app": "Soul Voyage"})
 
 urlpatterns = [
     path('', views.HomePage.as_view(), name='home'),
+    path('health/', health_check, name='health'),
     path('test/', views.HomePage.as_view(), name='test'),
     path('thanks/', views.ThanksPage.as_view(), name='thanks'),
     path('admin/', admin.site.urls),
