@@ -160,3 +160,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'meralamohankumar@gmail.com'       # your Gmail
 # EMAIL_HOST_PASSWORD = '' # Gmail App Password
 # DEFAULT_FROM_EMAIL = 'Soul Voyage <meralamohankumar@gmail.com>'
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.railway.app',
+    'https://soul-voyage-production.up.railway.app',
+    'https://*.onrender.com',
+    'https://soul-voyage.onrender.com',
+]
